@@ -1,19 +1,17 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-import { Container, Typography, CardActions, Button, Backdrop, CircularProgress } from "@mui/material";
+import { Container, CardActions, Button, TextField, Backdrop, CircularProgress } from "@mui/material";
 
 import "./style.scss";
 
-const Profile = (props) => {
-    const [profile, setProfile] = useState({
-        name: "",
-        email: "",
-        profileImaqe: '',
-    })
+const UpdateProfile = (props) => {
+    const [email, setEmail] = useState();
+    const [name, setName] = useState();
+    const [imageUrl, setImageUrl] = useState();
     const [loading, setLoading] = useState(false);
-    const { history } = props;
 
+    const { history } = props;
 
     const getProfile = async () => {
         try {
@@ -27,7 +25,9 @@ const Profile = (props) => {
             })
             if (response.data.status === 200) {
                 setLoading(false);
-                setProfile({ email: response.data.data.email, name: response.data.data.name, profileImage: response.data.data.imageUrl })
+                setEmail(response.data.data.email)
+                setName(response.data.data.name)
+                setImageUrl(response.data.data.imageUrl)
             } else {
                 setLoading(false)
             }
@@ -36,32 +36,48 @@ const Profile = (props) => {
         }
     };
 
-    const handleLogout = async () => {
+    const handleSubmit = async () => {
         try {
+            setLoading(true);
             const data = JSON.stringify({
-                "refreshToken": localStorage.getItem("refresh-token")
+                "name": "User"
             });
 
             const config = {
-                method: 'delete',
-                url: 'http://localhost:9000/api/user/logout',
+                method: 'put',
+                url: 'http://localhost:9000/api/user/update',
                 headers: {
+                    'Authorization': localStorage.getItem("access-token"),
                     'Content-Type': 'application/json'
                 },
                 data: data
             };
 
             const response = await axios(config)
+
             if (response.data.status === 200) {
-                localStorage.removeItem("access-token");
-                localStorage.removeItem("refresh-token");
-                history.push("/login")
+                setLoading(false);
+                history.push("/profile");
             } else {
-                alert("logout failed")
+                setLoading(false);
+                alert("Bad request")
             }
         } catch (err) {
-            alert("Logout failed");
+            setLoading(false);
+            alert(err.message);
         }
+    };
+
+    const handleNameChange = (e) => {
+        setName(e.target.value);
+    };
+
+    const handleEmailChange = (e) => {
+        setEmail(e.target.value);
+    };
+
+    const handleImageUrlChange = (e) => {
+        setImageUrl(e.target.value);
     };
 
     useEffect(() => {
@@ -76,31 +92,31 @@ const Profile = (props) => {
             >
                 <CircularProgress color="inherit" />
             </Backdrop>
-        ) : (
+        ) :
             <Container className="container" sx={{ display: "flex" }}>
                 <img
                     className="images"
                     src="/images/one-touch-profile.jpg"
-                    alt={`${profile.name}-profile`}
+                    alt={`${name}-profile`}
                 />
 
-                <Typography gutterBottom className="typography" sx={{ margin: "20px 0px 10px 0px" }} variant="h5" component="div">
+                <TextField className="typography" sx={{ margin: "20px 0px 10px 0px" }} defaultValue={name} onChange={handleNameChange}>
                     <b>
-                        {profile.name}
+                        {name}
                     </b>
-                </Typography>
-                <Typography gutterBottom className="typography" sx={{ margin: "5px" }} variant="h7" component="div">
+                </TextField>
+                <TextField className="typography" sx={{ margin: "5px" }} defaultValue={email} onChange={handleEmailChange}>
                     <b>
-                        {profile.email}
+                        {email}
                     </b>
-                </Typography>
+                </TextField>
 
                 <CardActions>
-                    <Button onClick={handleLogout} color="secondary" size="small">Logout</Button>
+                    <Button onClick={handleSubmit} color="secondary" size="small">Submit</Button>
                 </CardActions>
+
             </Container>
-        )
     )
 }
 
-export default Profile;
+export default UpdateProfile;

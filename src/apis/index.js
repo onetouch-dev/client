@@ -1,17 +1,14 @@
 import axios from "axios";
 
-const instance = axios.create({
-    baseURL: process.env.REACT_APP_BASEURL,
-});
-
-axios.defaults.headers.post['Content-Type'] = 'application/json';
-
 export const getAuthUser = async () => {
-    const response = await instance.get("/profile", {
+    const config = {
+        method: 'get',
+        url: 'http://localhost:9000/api/user/profile',
         headers: {
             'Authorization': localStorage.getItem("access-token")
         }
-    });
+    };
+    const response = await axios(config)
     return response;
 };
 
@@ -33,7 +30,6 @@ export const signup = async (name, email, password) => {
         },
         data: { email, name, password }
     });
-
     return response;
 };
 
@@ -46,7 +42,17 @@ export const logout = async () => {
         },
         data: { refreshToken: localStorage.getItem("refresh-token") }
     });
-
     return response;
+};
 
-}
+export const refreshToken = async () => {
+    const response = await axios({
+        method: 'post',
+        url: 'http://localhost:9000/api/user/refresh-token',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: { refreshToken: localStorage.getItem("refresh-token") }
+    });
+    return response;
+};

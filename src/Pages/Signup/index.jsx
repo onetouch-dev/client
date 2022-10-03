@@ -5,6 +5,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import { IconButton, InputAdornment } from '@mui/material';
 
 import { PrimaryButton, Heading, PublicFormHoc, PrimaryTextfield, FormFooter, Loader } from '../../components';
+import { setToken } from '../../helper';
 import { signup } from '../../apis';
 
 
@@ -17,14 +18,9 @@ const Signup = (props) => {
         setState({ ...state, [field]: input.target.value });
     };
 
-    const resetStates = () => {
+    const resetState = () => {
         setLoading(false)
         setState({});
-    };
-
-    const setToken = (accessToken, refreshToken) => {
-        localStorage.setItem("access-token", accessToken);
-        localStorage.setItem("refresh-token", refreshToken);
     };
 
     const handleSignup = async () => {
@@ -36,17 +32,16 @@ const Signup = (props) => {
             if (status === 200) {
                 setToken(accessToken, refreshToken);
                 history.push('/profile')
-                resetStates();
+                resetState();
             } else {
                 alert(response.data.message || "Bad request");
-                resetStates();
+                resetState();
             }
         } catch (err) {
             alert("login failed");
-            resetStates();
+            resetState();
         }
-
-    }
+    };
 
     return (
         loading ? (

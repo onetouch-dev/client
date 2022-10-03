@@ -4,6 +4,7 @@ import { Container, CardActions, TextField } from "@mui/material";
 
 import { SecondaryButton, PrimaryTypography, SecondaryTypography, Loader } from "../../components";
 import { getAuthUser, logout } from "../../apis";
+import { removeToken } from "../../helper";
 import "./style.scss";
 
 const Profile = (props) => {
@@ -30,8 +31,8 @@ const Profile = (props) => {
 
     const getProfile = async () => {
         try {
-            const response = await getAuthUser();
             setLoading(true)
+            const response = await getAuthUser();
             if (response.data.status === 200) {
                 setLoading(false);
                 setProfile({ email: response.data.data.email, name: response.data.data.name, imageUrl: response.data.data.imageUrl })
@@ -39,14 +40,8 @@ const Profile = (props) => {
                 setLoading(false)
             }
         } catch (err) {
-            console.log(err)
             setLoading(false)
         }
-    };
-
-    const removeToken = () => {
-        localStorage.removeItem("access-token");
-        localStorage.removeItem("refresh-token");
     };
 
     const handleLogout = async () => {

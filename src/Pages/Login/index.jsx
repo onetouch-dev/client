@@ -6,6 +6,7 @@ import { InputAdornment, IconButton } from '@mui/material'
 
 import { PrimaryButton, Heading, PrimaryTextfield, PublicFormHoc, FormFooter, CustomCheckbox, Loader } from "../../components";
 import { login } from '../../apis';
+import { setToken } from '../../helper';
 import "./style.scss";
 
 
@@ -24,14 +25,9 @@ const Login = (props) => {
         setState({ ...state, [field]: input.target.value });
     };
 
-    const resetStates = () => {
+    const resetState = () => {
         setLoading(false);
         setState({});
-    };
-
-    const setToken = (accessToken, refreshToken) => {
-        localStorage.setItem("access-token", accessToken);
-        localStorage.setItem("refresh-token", refreshToken);
     };
 
     const handleLogin = async () => {
@@ -43,14 +39,14 @@ const Login = (props) => {
             if (status === 200) {
                 setToken(accessToken, refreshToken);
                 history.push('/profile')
-                resetStates()
+                resetState()
             } else {
                 alert(response.data.message || "Bad request");
-                resetStates()
+                resetState()
             }
         } catch (err) {
-            alert("login failed")
-            resetStates()
+            alert("Wrong Credentials")
+            resetState()
         }
     }
 

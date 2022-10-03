@@ -1,22 +1,12 @@
 import React, { useState } from 'react';
 import axios from "axios";
-import {
-    Box,
-    Link,
-    FormControlLabel,
-    Checkbox,
-    Container,
-    Backdrop,
-    CircularProgress,
-    InputAdornment,
-    IconButton
-} from '@mui/material'
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import { Backdrop, CircularProgress, InputAdornment, IconButton } from '@mui/material'
 
+import { PrimaryButton, Heading, PrimaryTextfield, PublicFormHoc, FormFooter, CustomCheckbox } from "../../components";
 import "./style.scss";
-import { PrimaryButton, Heading, PrimaryTextfield } from "../../components";
 
 const Login = (props) => {
     const { history } = props;
@@ -78,61 +68,52 @@ const Login = (props) => {
             >
                 <CircularProgress color="inherit" />
             </Backdrop>
-        ) :
-            <Container maxWidth="sm">
-                <Box
-                    className="box"
-                    sx={{
-                        marginTop: 12,
-                        display: 'flex',
-                        flexDirection: 'column',
-                    }}
-                >
-                    <img src="/images/login.png" alt="login" className="image" />
-                    <Heading value="Login" />
-                    <PrimaryTextfield
-                        label="Email Address"
-                        onChange={(input) => { handleChange(input, 'username') }}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <IconButton className="icon-button">
-                                        <AccountCircle className="icon" />
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                    <PrimaryTextfield
-                        label="Password"
-                        type={visible ? "text" : "password"}
-                        onChange={(input) => { handleChange(input, 'password') }}
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <IconButton onClick={() => setVisible(!visible)} className="icon-button">
-                                        {visible ? <VisibilityOffIcon className="icon" /> : <VisibilityIcon className="icon" />}
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
-                    />
-                    <PrimaryButton
-                        label="SIGN IN"
-                        onClick={handleLogin}
-                        isDisabled={!(state.username && state.password)} />
-                    <div onClick={() => history.push('/signup')}>
-                        <Link variant="body2" style={{ cursor: "pointer" }}>
-                            {"Don't have an account? Sign Up"}
-                        </Link>
-                    </div>
-                </Box>
-            </Container>
+        ) : <>
+            <img src="/images/login.png" alt="login" className="image" />
+            <Heading value="Login" />
+            <PrimaryTextfield
+                label="Email Address"
+                onChange={(input) => { handleChange(input, 'username') }}
+                InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <IconButton className="icon-button">
+                                <AccountCircle className="icon" />
+                            </IconButton>
+                        </InputAdornment>
+                    ),
+                }}
+            />
+            <PrimaryTextfield
+                label="Password"
+                type={visible ? "text" : "password"}
+                onChange={(input) => { handleChange(input, 'password') }}
+                InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <IconButton onClick={() => setVisible(!visible)} className="icon-button">
+                                {visible ? <VisibilityOffIcon className="icon" /> : <VisibilityIcon className="icon" />}
+                            </IconButton>
+                        </InputAdornment>
+                    ),
+                }}
+            />
+            
+            <br/>
+            <CustomCheckbox />
+    
+            <PrimaryButton
+                label="SIGN IN"
+                onClick={handleLogin}
+                isDisabled={!(state.username && state.password)} />
+
+            <br />
+            <FormFooter
+                onClick={() => history.push("/signup")}
+                label="Not registered yet?"
+                value="Create an Account" />
+        </>
     )
 }
 
-export default Login;
+export default PublicFormHoc(Login);

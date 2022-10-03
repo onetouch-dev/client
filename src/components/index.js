@@ -4,3 +4,6 @@ export { default as SecondaryButton } from "./secondaryButton";
 export { default as PrimaryTextfield } from "./primaryTextfield";
 export { default as PrimaryTypography } from "./primaryTypography";
 export { default as SecondaryTypography } from "./secondaryTypography";
+export { default as PublicFormHoc } from "./publicFormHOC";
+export { default as FormFooter } from "./formFooter";
+export { default as CustomCheckbox } from "./checkbox";

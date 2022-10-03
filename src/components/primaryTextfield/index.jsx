@@ -1,11 +1,11 @@
 import { TextField } from "@mui/material";
 
 const PrimaryTextfield = (props) => {
-    const { required, label, type, onChange, InputProps } = props;
+    const { label, type, onChange, InputProps } = props;
     return (
         <TextField
             margin="normal"
-            required={required}
+            required
             fullWidth
             id={label}
             type={type || "text"}

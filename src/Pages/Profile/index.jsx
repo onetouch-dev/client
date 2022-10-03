@@ -1,16 +1,10 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 
-import {
-    Container,
-    CardActions,
-    Backdrop,
-    CircularProgress,
-    TextField
-} from "@mui/material";
+import { Container, CardActions, TextField } from "@mui/material";
 
+import { SecondaryButton, PrimaryTypography, SecondaryTypography, Loader } from "../../components";
+import { getAuthUser, logout } from "../../apis";
 import "./style.scss";
-import { SecondaryButton, PrimaryTypography, SecondaryTypography } from "../../components";
 
 const Profile = (props) => {
     const [profile, setProfile] = useState({
@@ -36,14 +30,8 @@ const Profile = (props) => {
 
     const getProfile = async () => {
         try {
+            const response = await getAuthUser();
             setLoading(true)
-            const response = await axios({
-                method: 'get',
-                url: 'http://localhost:9000/api/user/profile',
-                headers: {
-                    'Authorization': localStorage.getItem("access-token")
-                }
-            })
             if (response.data.status === 200) {
                 setLoading(false);
                 setProfile({ email: response.data.data.email, name: response.data.data.name, imageUrl: response.data.data.imageUrl })
@@ -51,29 +39,21 @@ const Profile = (props) => {
                 setLoading(false)
             }
         } catch (err) {
+            console.log(err)
             setLoading(false)
         }
     };
 
+    const removeToken = () => {
+        localStorage.removeItem("access-token");
+        localStorage.removeItem("refresh-token");
+    };
+
     const handleLogout = async () => {
         try {
-            const data = JSON.stringify({
-                "refreshToken": localStorage.getItem("refresh-token")
-            });
-
-            const config = {
-                method: 'delete',
-                url: 'http://localhost:9000/api/user/logout',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                data: data
-            };
-
-            const response = await axios(config)
+            const response = await logout()
             if (response.data.status === 200) {
-                localStorage.removeItem("access-token");
-                localStorage.removeItem("refresh-token");
+                removeToken();
                 history.push("/login")
             } else {
                 alert("logout failed")
@@ -115,12 +95,7 @@ const Profile = (props) => {
 
     return (
         loading ? (
-            <Backdrop
-                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={loading}
-            >
-                <CircularProgress color="inherit" />
-            </Backdrop>
+            <Loader />
         ) : (
             <Container className="container" sx={{ display: "flex" }}>
                 <img

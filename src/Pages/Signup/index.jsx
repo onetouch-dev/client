@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import axios from "axios";
 import HttpsIcon from '@mui/icons-material/Https';
 import EmailIcon from '@mui/icons-material/Email';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import { Backdrop, CircularProgress, IconButton, InputAdornment } from '@mui/material';
+import { IconButton, InputAdornment } from '@mui/material';
 
-import { PrimaryButton, Heading, PublicFormHoc, PrimaryTextfield, FormFooter } from '../../components';
+import { PrimaryButton, Heading, PublicFormHoc, PrimaryTextfield, FormFooter, Loader } from '../../components';
+import { signup } from '../../apis';
 
 
 const Signup = (props) => {
@@ -17,54 +17,41 @@ const Signup = (props) => {
         setState({ ...state, [field]: input.target.value });
     };
 
+    const resetStates = () => {
+        setLoading(false)
+        setState({});
+    };
+
+    const setToken = (accessToken, refreshToken) => {
+        localStorage.setItem("access-token", accessToken);
+        localStorage.setItem("refresh-token", refreshToken);
+    };
+
     const handleSignup = async () => {
         try {
+            const { email, password, name } = state;
             setLoading(true);
-            const data = JSON.stringify({
-                "name": state.name,
-                "email": state.email,
-                "password": state.password,
-            });
-
-            const config = {
-                method: 'post',
-                url: 'http://localhost:9000/api/user/signup',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                data: data
-            };
-
-            const response = await axios(config)
-
-            if (response.data.status === 200) {
-                localStorage.setItem("access-token", response.data.accessToken);
-                localStorage.setItem("refresh-token", response.data.refreshToken);
+            const response = await signup(name, email, password);
+            const { data: { accessToken = "", refreshToken = "" }, status } = response
+            if (status === 200) {
+                setToken(accessToken, refreshToken);
                 history.push('/profile')
-                setLoading(false)
-                setState({});
+                resetStates();
             } else {
                 alert(response.data.message || "Bad request");
-                setLoading(false)
-                setState({});
+                resetStates();
             }
         } catch (err) {
             alert("login failed");
-            setState({});
-            setLoading(false);
+            resetStates();
         }
 
     }
 
     return (
         loading ? (
-            <Backdrop
-                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={loading}
-            >
-                <CircularProgress color="inherit" />
-            </Backdrop>
-        ) :
+            <Loader />
+        ) : (
             <>
                 <img src="/images/login.png" alt="login" className="image" />
                 <Heading value="Sign up" />
@@ -118,6 +105,7 @@ const Signup = (props) => {
                     label="Already have an account?"
                     value="Login" />
             </>
+        )
     )
 }
 

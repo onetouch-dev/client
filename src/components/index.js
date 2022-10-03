@@ -7,3 +7,4 @@ export { default as SecondaryTypography } from "./secondaryTypography";
 export { default as PublicFormHoc } from "./publicFormHOC";
 export { default as FormFooter } from "./formFooter";
 export { default as CustomCheckbox } from "./checkbox";
+export { default as Loader } from "./loader";

@@ -28,7 +28,7 @@ const Topbar = (props) => {
                     </IconButton>
                 </Box>
                 {history.location.pathname === "/profile" ? (
-                    <Button color="inherit" onClick={() => history.push("/update-profile")} >Update profile</Button>
+                    <Button color="inherit" onClick={() => history.push("/change-password")} >Change Password</Button>
                 ) : (
                     <Button color="inherit" onClick={() => history.push("/profile")} >profile</Button>
                 )}

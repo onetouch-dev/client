@@ -1,4 +1,4 @@
-export { Login } from './Login';
-export { Signup } from './Signup';
-export { Profile } from './Profile';
-export { default as UpdateProfile } from "./UpdateProfile";
+export { default as Login } from "./Login";
+export { default as Signup } from "./Signup";
+export { default as Profile } from "./Profile";
+export { default as ChangePassword } from "./ChangePassword";

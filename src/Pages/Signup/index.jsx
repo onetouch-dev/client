@@ -1,6 +1,21 @@
 import React, { useState } from 'react';
-import { Box, Link, Button, Typography, TextField, Container, Backdrop, CircularProgress } from '@mui/material'
 import axios from "axios";
+import {
+    Box,
+    Link,
+    TextField,
+    Container,
+    Backdrop,
+    CircularProgress,
+    IconButton,
+    InputAdornment
+} from '@mui/material';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import EmailIcon from '@mui/icons-material/Email';
+import HttpsIcon from '@mui/icons-material/Https';
+
+import { PrimaryButton, Heading } from '../../components';
+
 
 const Signup = (props) => {
     const { history } = props;
@@ -60,17 +75,16 @@ const Signup = (props) => {
             </Backdrop>
         ) :
             <Container maxWidth="sm">
-                <Box
-                    style={{ border: '1px solid #efefef', boxShadow: '1px 1px 10px #efefef', padding: '100px 30px' }}
+                 <Box
+                    style={{ border: '1px solid #efefef', boxShadow: '1px 1px 10px #efefef', padding: '30px' }}
                     sx={{
                         marginTop: 12,
                         display: 'flex',
                         flexDirection: 'column',
                     }}
                 >
-                    <Typography align="center" component="h1" variant="h5">
-                        Sign Up
-                    </Typography>
+                    <img src="/images/login.png" alt="login" className="image" />
+                    <Heading value="SIGN UP" />
                     <TextField
                         margin="normal"
                         required
@@ -79,6 +93,15 @@ const Signup = (props) => {
                         label="Full Name"
                         name="name"
                         onChange={(input) => { handleChange(input, 'name') }}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <IconButton className="icon-button">
+                                        <AccountCircle className="icon" />
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
                     <TextField
                         margin="normal"
@@ -88,6 +111,15 @@ const Signup = (props) => {
                         label="Email Address"
                         name="email"
                         onChange={(input) => { handleChange(input, 'email') }}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <IconButton className="icon-button">
+                                        <EmailIcon className="icon" />
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
                     <TextField
                         margin="normal"
@@ -95,20 +127,24 @@ const Signup = (props) => {
                         fullWidth
                         name="password"
                         label="Password"
-                        type="password"
+                        type="text"
                         id="password"
                         onChange={(input) => { handleChange(input, 'password') }}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <IconButton className="icon-button">
+                                        <HttpsIcon className="icon" />
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
-                    <Button
-                        disabled={!(state.name && state.email && state.password)}
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
+                    <PrimaryButton
+                        label="SIGN UP"
                         onClick={handleSignup}
-                    >
-                        Sign In
-                    </Button>
+                        isDisabled={!(state.name && state.email && state.password)} />
+
                     <div onClick={() => history.push('/login')}>
                         <Link variant="body2" style={{ cursor: "pointer" }}>
                             {"Already have an account? Sign In"}

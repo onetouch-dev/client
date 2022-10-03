@@ -23,5 +23,5 @@ axios.interceptors.response.use(resp => resp, async error => {
             return axios(error.config);
         }
     }
-    return error;
+    return error.response.data;
 });

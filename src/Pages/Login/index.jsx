@@ -5,13 +5,18 @@ import {
     Link,
     FormControlLabel,
     Checkbox,
-    Button,
-    Typography,
-    TextField,
     Container,
     Backdrop,
-    CircularProgress
+    CircularProgress,
+    InputAdornment,
+    IconButton
 } from '@mui/material'
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+
+import "./style.scss";
+import { PrimaryButton, Heading, PrimaryTextfield } from "../../components";
 
 const Login = (props) => {
     const { history } = props;
@@ -21,6 +26,7 @@ const Login = (props) => {
         password: "",
     });
 
+    const [visible, setVisible] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const handleChange = (input, field) => {
@@ -61,7 +67,6 @@ const Login = (props) => {
             alert("login failed")
             setLoading(false);
             setState({})
-
         }
     }
 
@@ -76,51 +81,50 @@ const Login = (props) => {
         ) :
             <Container maxWidth="sm">
                 <Box
-                    style={{ border: '1px solid #efefef', boxShadow: '1px 1px 10px #efefef', padding: '100px 30px' }}
+                    className="box"
                     sx={{
                         marginTop: 12,
                         display: 'flex',
                         flexDirection: 'column',
                     }}
                 >
-                    <Typography align="center" component="h1" variant="h5">
-                        Login
-                    </Typography>
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="email"
+                    <img src="/images/login.png" alt="login" className="image" />
+                    <Heading value="Login" />
+                    <PrimaryTextfield
                         label="Email Address"
-                        name="email"
-                        autoComplete="email"
                         onChange={(input) => { handleChange(input, 'username') }}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <IconButton className="icon-button">
+                                        <AccountCircle className="icon" />
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
+                    <PrimaryTextfield
                         label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
+                        type={visible ? "text" : "password"}
                         onChange={(input) => { handleChange(input, 'password') }}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <IconButton onClick={() => setVisible(!visible)} className="icon-button">
+                                        {visible ? <VisibilityOffIcon className="icon" /> : <VisibilityIcon className="icon" />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
                         label="Remember me"
                     />
-                    <Button
-                        disabled={!(state.username && state.password)}
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
+                    <PrimaryButton
+                        label="SIGN IN"
                         onClick={handleLogin}
-                    >
-                        Sign In
-                    </Button>
+                        isDisabled={!(state.username && state.password)} />
                     <div onClick={() => history.push('/signup')}>
                         <Link variant="body2" style={{ cursor: "pointer" }}>
                             {"Don't have an account? Sign Up"}

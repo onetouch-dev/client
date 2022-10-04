@@ -1,6 +1,7 @@
-import { Login, Profile, Signup } from './Pages';
-import { AuthRoute, PrivateRoute } from './routes';
 import { BrowserRouter, Switch, Redirect } from 'react-router-dom';
+
+import { Login, Profile, Signup, ChangePassword } from './Pages';
+import { AuthRoute, PrivateRoute } from './routes';
 
 const App = () => {
   return (
@@ -10,6 +11,7 @@ const App = () => {
         <AuthRoute exact path="/login" component={Login} />
         <AuthRoute exact path="/signup" component={Signup} />
         <PrivateRoute exact path="/profile" component={Profile} />
+        <PrivateRoute exact path="/change-password" component={ChangePassword} />
       </Switch>
     </BrowserRouter>
   );

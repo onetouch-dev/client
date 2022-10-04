@@ -56,3 +56,39 @@ export const refreshToken = async () => {
     });
     return response;
 };
+
+export const changePassword = async (currentP, newP) => {
+    const response = await axios({
+        method: 'patch',
+        url: 'http://localhost:9000/api/user/change-password',
+        headers: {
+            'Authorization': localStorage.getItem("access-token"),
+            'Content-Type': 'application/json'
+        },
+        data: {
+            currentPassword: currentP,
+            newPassword: newP
+        }
+    });
+
+    return response;
+};
+
+export const updateProfile = async (payload) => {
+    Object.keys(payload).forEach(key => {
+        if (payload[key] === null) {
+            delete payload[key];
+        }
+    });
+    const response = await axios({
+        method: 'put',
+        url: 'http://localhost:9000/api/user/update',
+        headers: {
+            'Authorization': localStorage.getItem("access-token"),
+            'Content-Type': 'application/json'
+        },
+        data: payload
+    });
+
+    return response;
+};

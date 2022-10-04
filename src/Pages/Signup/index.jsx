@@ -43,6 +43,13 @@ const Signup = (props) => {
         }
     };
 
+    const handleEnter = (e) => {
+        const { email, password, name } = state;
+        if (e.key === "Enter" && email && password && name) {
+            handleSignup();
+        }
+    };
+
     return (
         loading ? (
             <Loader />
@@ -52,6 +59,7 @@ const Signup = (props) => {
                 <Heading value="Sign up" />
                 <PrimaryTextfield
                     label="Full Name"
+                    onEnter={handleEnter}
                     onChange={(input) => { handleChange(input, 'name') }}
                     InputProps={{
                         startAdornment: (
@@ -65,6 +73,7 @@ const Signup = (props) => {
                 />
                 <PrimaryTextfield
                     label="Email Address"
+                    onEnter={handleEnter}
                     onChange={(input) => { handleChange(input, 'email') }}
                     InputProps={{
                         startAdornment: (
@@ -78,6 +87,7 @@ const Signup = (props) => {
                 />
                 <PrimaryTextfield
                     label="Password"
+                    onEnter={handleEnter}
                     onChange={(input) => { handleChange(input, 'password') }}
                     InputProps={{
                         startAdornment: (

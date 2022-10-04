@@ -1,7 +1,7 @@
 import { TextField } from "@mui/material";
 
 const PrimaryTextfield = (props) => {
-    const { label, type, onChange, InputProps } = props;
+    const { label="", type, onChange, InputProps={}, onEnter=()=>{} } = props;
     return (
         <TextField
             margin="normal"
@@ -13,6 +13,7 @@ const PrimaryTextfield = (props) => {
             name={label}
             onChange={onChange}
             InputProps={InputProps}
+            onKeyPress={onEnter}
         />
     )
 };

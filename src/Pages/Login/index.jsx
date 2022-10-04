@@ -48,7 +48,14 @@ const Login = (props) => {
             alert("Wrong Credentials")
             resetState()
         }
-    }
+    };
+
+    const handleEnter = (e) => {
+        const { username, password } = state;
+        if (e.key === "Enter" && username && password) {
+            handleLogin();
+        }
+    };
 
     return (
         loading ? (
@@ -59,6 +66,7 @@ const Login = (props) => {
                 <Heading value="Login" />
                 <PrimaryTextfield
                     label="Email Address"
+                    onEnter={handleEnter}
                     onChange={(input) => { handleChange(input, 'username') }}
                     InputProps={{
                         startAdornment: (
@@ -73,6 +81,7 @@ const Login = (props) => {
                 <PrimaryTextfield
                     label="Password"
                     type={visible ? "text" : "password"}
+                    onEnter={handleEnter}
                     onChange={(input) => { handleChange(input, 'password') }}
                     InputProps={{
                         startAdornment: (
@@ -89,7 +98,7 @@ const Login = (props) => {
                 <CustomCheckbox />
 
                 <PrimaryButton
-                    label="SIGN IN"
+                    label="LOGIN"
                     onClick={handleLogin}
                     isDisabled={!(state.username && state.password)} />
 

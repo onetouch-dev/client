@@ -38,7 +38,7 @@ const Signup = (props) => {
                 resetState();
             }
         } catch (err) {
-            alert("login failed");
+            alert("Bad Request");
             resetState();
         }
     };
